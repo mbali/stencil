@@ -8,8 +8,9 @@
             [stencil.eval :as eval]
             [stencil.merger :as merger]
             [stencil.model.numbering :as numbering]
-            [stencil.types :refer [->FragmentInvoke ->ReplaceImage]]
+            [stencil.types :refer [->FragmentInvoke ->ReplaceImage ->ReplaceLink]]
             [stencil.postprocess.images :refer [img-data->extrafile]]
+            [stencil.postprocess.links :refer [link-url->relation]]
             [stencil.util :refer [unlazy-tree assoc-if-val]]
             [stencil.model.relations :as relations]
             [stencil.model.common :refer [unix-path ->xml-writer resource-copier]]
@@ -264,3 +265,9 @@
   (let [extra-file (img-data->extrafile data)]
     (add-extra-file! extra-file)
     (->ReplaceImage (:new-id extra-file))))
+
+;; replaces the nearest link's URK with the parameter value
+(defmethod call-fn "replaceLink" [_ url]
+  (let [new-relation (link-url->relation (str url))]
+    (add-extra-file! new-relation)
+    (->ReplaceLink (:new-id new-relation))))

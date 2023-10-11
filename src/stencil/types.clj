@@ -37,4 +37,7 @@
 ;; Tells if the reference of an adjacent image node should be replaced in postprocess step.
 (defrecord ReplaceImage [relation] ControlMarker)
 
+;; Tells if the reference of an adjacent hyperlink node should be replaced in postprocess step.
+(defrecord ReplaceLink [relation] ControlMarker)
+
 (defn control? [x] (satisfies? ControlMarker x))
